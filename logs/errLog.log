@@ -1,0 +1,24 @@
+20240420	14:40:25	cf806e6b-9c6b-4d3f-993e-b1c8948adc68	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:41:00	fc0402c6-bf65-4072-99f0-7bde6ba2a402	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:41:01	4f56738c-e292-4e60-83a3-3a84db604c07	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:41:24	3eb51996-9495-4543-a0d1-0dbccc297c85	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:42:39	59cb80af-2789-4ce2-b311-273ea47c808f	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:46:25	04b0a1df-25f5-41ed-9fc6-9852fdef7f60	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:46:45	214d2ac1-c616-42c0-9a8d-e07caf031a0d	ReferenceError: allowedOrigines is not defined	GET	/employes	undefined
+20240420	14:54:27	5abb07c6-01b7-430c-8cb4-27208c6e950f	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:54:41	f52cf872-63fb-4f33-ad04-21d49fe20a46	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:54:59	6226e5cf-d0d2-4956-8e1f-e81f6f4fc7eb	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:55:59	fb437130-5081-4040-b883-3a09c66d948a	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:57:19	1100f614-29de-4a0d-8db5-a473a54b4bda	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:57:27	429deb97-1760-41ec-b56f-97787d1d2f3b	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:58:41	845adbe8-f614-418f-9285-56d0e57dfb36	SyntaxError: Expected property name or '}' in JSON at position 7	POST	/Employee	undefined
+20240420	14:58:56	2f333b47-4e93-4611-b776-585fb1b2eb4f	SyntaxError: Expected property name or '}' in JSON at position 13	POST	/Employee	undefined
+20240420	15:00:39	098eb6a5-c7f3-4623-9fc7-0fe60179d74d	ValidationError: Emlpoyee validation failed: Employeename: Path `Employeename` is required.	POST	/Employee	undefined
+20240420	15:01:25	d23889f6-e345-49bd-be1f-160ff80337fb	ValidationError: Emlpoyee validation failed: Employeename: Path `Employeename` is required.	POST	/Employee	undefined
+20240420	15:03:04	0bd84539-7774-4483-9b50-d314cdbe3fb4	ValidationError: Emlpoyee validation failed: username: Path `username` is required.	POST	/Employee	undefined
+20240424	11:59:37	344b6bde-48d8-495b-b993-51205241dd3b	TypeError: Assignment to constant variable.	GET	/doctors	undefined
+20240424	12:26:20	bcac1479-f255-401c-b171-1f4a2df9715d	Error: Cannot set headers after they are sent to the client	GET	/doctors	undefined
+20240509	21:20:20	0ecb7af6-8c3f-42b5-9d4e-3c8a299f7ca2	SyntaxError: Unexpected non-whitespace character after JSON at position 146	PATCH	/clients	undefined
+20240509	21:21:49	07100ce1-55b9-4633-ab72-8bd1730dc82d	ReferenceError: mail is not defined	PATCH	/clients	undefined
+20240509	21:22:38	072c709f-6f71-410c-b7f7-cd036a5624ca	ReferenceError: mail is not defined	PATCH	/clients	undefined
+20240509	21:24:49	4ed45827-438b-4a82-8d1f-ea194f7d524a	SyntaxError: Expected double-quoted property name in JSON at position 86	PATCH	/clients	undefined
