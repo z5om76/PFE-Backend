@@ -133,6 +133,7 @@ const getDoctors = asyncHandler(async (req, res) => {
         
   })
 
+  //change name from "getCouchs" to "getCoaches"
   const getCouchs = asyncHandler(async (req, res) => {
 
     const { job="couch" } = req.params;
