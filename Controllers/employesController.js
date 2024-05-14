@@ -133,8 +133,9 @@ const getDoctors = asyncHandler(async (req, res) => {
         
   })
 
+  //change "getCouchs" to "getCoaches"
   const getCouchs = asyncHandler(async (req, res) => {
-
+        // and "couch" to "coach"
     const { job="couch" } = req.params;
 
         const Employes = await Employee.find({ job : job }).select('-password').lean();
