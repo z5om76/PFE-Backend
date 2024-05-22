@@ -35,8 +35,7 @@ app.use('/employes',require('./routes/employesRoutes'))
 
 app.use('/doctors',require('./routes/doctorsRoutes'))
 
-//change '/couchs' to '/coaches'
-app.use('/couchs',require('./routes/couchsRoutes'))
+app.use('/coaches',require('./routes/coachesRoutes'))
 
 app.all('*', (req,res)=>{
     res.status(404)
