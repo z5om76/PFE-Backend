@@ -22,3 +22,13 @@
 20240509	21:21:49	07100ce1-55b9-4633-ab72-8bd1730dc82d	ReferenceError: mail is not defined	PATCH	/clients	undefined
 20240509	21:22:38	072c709f-6f71-410c-b7f7-cd036a5624ca	ReferenceError: mail is not defined	PATCH	/clients	undefined
 20240509	21:24:49	4ed45827-438b-4a82-8d1f-ea194f7d524a	SyntaxError: Expected double-quoted property name in JSON at position 86	PATCH	/clients	undefined
+20240525	11:25:21	78cd90f0-9755-48da-b90a-0cd2889f12aa	MongoServerSelectionError: E4610000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1586:SSL alert number 80
+	GET	/clients	undefined
+20240525	11:25:34	213bf92b-1d56-40c0-b649-fe4c9f5ac5fa	MongoServerSelectionError: E4610000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1586:SSL alert number 80
+	GET	/clients	undefined
+20240525	11:25:58	229d6c47-0b2d-4592-b9b5-fb213aad3ce4	MongoServerSelectionError: E4610000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1586:SSL alert number 80
+	GET	/clients	undefined
+20240525	11:28:51	9a0e1611-8edb-4cf3-b57d-36803449e177	MongoServerSelectionError: E4610000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1586:SSL alert number 80
+	GET	/clients	undefined
+20240525	11:28:59	e793f09b-fc76-4aa4-b5bc-232e4ac0b492	MongoServerSelectionError: E4610000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1586:SSL alert number 80
+	GET	/clients	undefined
