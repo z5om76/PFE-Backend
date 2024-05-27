@@ -37,7 +37,7 @@ app.use('/employes',require('./routes/employesRoutes'))
 
 app.use('/doctors',require('./routes/doctorsRoutes'))
 
-app.use('/couchs',require('./routes/couchsRoutes'))
+app.use('/coaches',require('./routes/coachesRoutes'))
 
 app.use("/payments", require('./routes/paymentsRoutes'));
 

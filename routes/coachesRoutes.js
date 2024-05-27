@@ -4,7 +4,7 @@ const employesController = require('../Controllers/employesController')
 
 router.route('/')
     
-    .get(employesController.getCouchs)
+      .get(employesController.getCoaches)
     
     
 

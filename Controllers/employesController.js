@@ -133,9 +133,8 @@ const getDoctors = asyncHandler(async (req, res) => {
         
   })
 
-  const getCouchs = asyncHandler(async (req, res) => {
-
-    const { job="couch" } = req.params;
+  const getCoaches = asyncHandler(async (req, res) => {
+    const { job="coach" } = req.params;
 
         const Employes = await Employee.find({ job : job }).select('-password').lean();
         res.json(Employes);
@@ -148,7 +147,7 @@ const getDoctors = asyncHandler(async (req, res) => {
 
 
 module.exports = {
-    getCouchs,
+    getCoaches,
     getDoctors,
     getAllEmployes,
     createNewEmployee,
