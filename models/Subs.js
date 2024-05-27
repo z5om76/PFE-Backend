@@ -1,23 +1,22 @@
 const mongoose = require('mongoose')
 
 const subsSchema = new mongoose.Schema({
-    Type: {
+    Type:{
         type: String,
-        required: true
+        enum: ["1 Month", "3 Months", "6 Months"],
+        required: true,
+      
     },
-    Expire_Time: {
-        type: Date,
-        required: true
-    },
+    
     Client: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref:'Clients'
+        ref:'Client'
     },
     Employee: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref:'Employes'
+        ref:'Employee'
 }})
 
 module.exports = mongoose.model('Subs', subsSchema)

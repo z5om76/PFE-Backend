@@ -1,6 +1,7 @@
 const Client = require('../models/Client')
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcrypt')
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
 
 // @desc Get all clients
 // @route GET /clients
@@ -21,15 +22,15 @@ const getAllClients = asyncHandler(async (req, res) => {
 // @route POST /clients
 // @access Private
 const createNewClient = asyncHandler(async (req, res) => {
-    const { clientname, password, mail } = req.body
+    const { clientname, password, email } = req.body
 
     // Confirm data
-    if (!clientname || !password || !mail) {
+    if (!clientname || !password || !email) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
     // Check for duplicate clientname
-    const duplicate = await Client.findOne({ mail }).lean().exec()
+    const duplicate = await Client.findOne({ email }).lean().exec()
 
     if (duplicate) {
         return res.status(409).json({ message: 'Duplicate client' })
@@ -38,7 +39,16 @@ const createNewClient = asyncHandler(async (req, res) => {
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
 
-    const clientObject = { clientname, "password": hashedPwd, mail }
+    const customer = await stripe.customers.create(
+      {
+        email,
+      },
+      {
+        apiKey: process.env.STRIPE_SECRET_KEY,
+      }
+    );
+
+    const clientObject = { clientname, "password": hashedPwd, email , stripeCustomerId: customer.id }
 
     // Create and store new client 
     const client = await Client.create(clientObject)
@@ -54,7 +64,7 @@ const createNewClient = asyncHandler(async (req, res) => {
 // @route PATCH /clients
 // @access Private
 const updateClient = asyncHandler(async (req, res) => {
-    const { id, clientname, mail, password } = req.body
+    const { id, clientname, email, password } = req.body
 
     // Confirm data 
     if (!id || !clientname ) {
@@ -69,7 +79,7 @@ const updateClient = asyncHandler(async (req, res) => {
     }
 
     // Check for duplicate 
-    const duplicate = await Client.findOne({ mail }).lean().exec()
+    const duplicate = await Client.findOne({ email }).lean().exec()
 
     // Allow updates to the original client 
     if (duplicate && duplicate?._id.toString() !== id) {

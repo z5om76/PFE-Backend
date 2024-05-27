@@ -10,10 +10,16 @@ const clientSchema = new mongoose.Schema({
         required: true
     },
 
-    mail: {
+    email: {
         type: String,
-        required: true
-    }
+        trim: true,
+        required: true,
+        unique: true
+    },
+    stripeCustomerId: {
+        type: String,
+        required: true,
+      },
     
 })
 

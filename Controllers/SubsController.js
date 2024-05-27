@@ -1,86 +1,99 @@
-const Subs = require('../models/Subs')
 const asyncHandler = require('express-async-handler')
+const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY)
+const Client = require('../models/Client')
+const Employee = require('../models/Employee')
+const Subs = require('../models/Subs');
+const verifyJWT = require('../middleware/verifyJWT');
 
 
 
-const getAllSubs = asyncHandler(async (req, res) => {
-    // Get all subs from MongoDB
-    const subs = await Sub.find()
 
-    // If no subs 
-    if (!subs?.length) {
-        return res.status(400).json({ message: 'No subs found' })
+
+const getSubs = asyncHandler ( async (req, res) => {
+  const {email} = req.body
+    const client = await Client.findOne({ email });
+    
+    if (!client) {
+      return res.status(404).json({ message: 'Client not found' });
     }
+  
+    const subscriptions = await stripe.charges.list(
+       
+      {
+        customer: client.stripeCustomerId,
+      },
+      {
+        apiKey: process.env.STRIPE_SECRET_KEY,
+      }
+    );
+    console.log(client.stripeCustomerId);
+    console.log('Subscriptions:', subscriptions);
+    const plan = subscriptions.data[0].amount;
+    res.json(plan);
+  });
 
-    res.json(subs)
-})
 
 
 
-const createNewSub = asyncHandler(async (req, res) => {
-    const { Type, Client, Employee} = req.body
+  const createSubs = asyncHandler ( async (req, res) => {
+    const {Employee, email} = req.body
 
-    // Confirm data
-    if (!Type) {
-        return res.status(400).json({ message: 'All fields are required' })
+    const client = await Client.findOne({ email });
+    const idc = client.id
+    const ide = await Subs.findById ({Employee})
+
+    if (!client) {
+      return res.status(404).json({ message: 'Client not found' });
     }
+  
+    const subscriptions = await stripe.charges.list(
+       
+      {
+        customer: client.stripeCustomerId,
+      },
+      {
+        apiKey: process.env.STRIPE_SECRET_KEY,
+      }
+    );
+    console.log(client.stripeCustomerId);
+    console.log('Subscriptions:', subscriptions);
+    const plan = subscriptions.data[0].amount;
+    
+    if (plan === 3000) {
+        const type = "1 Month"
+        const subObject = {"Type": type, "Client" : idc, "Employee" : ide }
+        const sub = await Subs.create(subObject);
 
-    // Check for duplicate subname
-    const duplicate = await Sub.findOne({ Client }).lean().exec()
+        if (sub) { //created 
+            res.status(201).json({ message: `New sub ${Subs.id} created` })
+        } else {
+            res.status(400).json({ message: 'Invalid sub data received' })
+        }
+      }
+ /*       else if (plan === 90) {
+            const type = "3 Months"
+            const subObject = { employee, client, type}
+            const sub = await Subs.create(subObject);
+        
+            if (sub) { //created 
+                res.status(201).json({ message: `New sub ${Subs.id} created` })
+            } else {
+                res.status(400).json({ message: 'Invalid sub data received' })
+            }} 
+        else {
+            const type = "6 Months"
+            const subObject = { employee, client, type}
+            const sub = await Subs.create(subObject);
 
-    if (duplicate) {
-        return res.status(409).json({ message: 'Duplicate subname' })
-    }
+            if (sub) { //created 
+                res.status(201).json({ message: `New sub ${Subs.id} created` })
+            } else {
+                res.status(400).json({ message: 'Invalid sub data received' })
+            }
+      }
+      */
 
-    // Hash password 
-    const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
-
-    const subObject = { subname, "password": hashedPwd, job }
-
-    // Create and store new sub 
-    const sub = await Sub.create(subObject)
-
-    if (sub) { //created 
-        res.status(201).json({ message: `New sub ${subname} created` })
-    } else {
-        res.status(400).json({ message: 'Invalid sub data received' })
-    }
-})
-
-
-const deleteSub = asyncHandler(async (req, res) => {
-    const { id } = req.body
-
-    // Confirm data
-    if (!id) {
-        return res.status(400).json({ message: 'Sub ID Required' })
-    }
-
-    // Does the sub still have assigned notes?
-    const note = await Note.findOne({ sub: id }).lean().exec()
-    if (note) {
-        return res.status(400).json({ message: 'Sub has assigned notes' })
-    }
-
-    // Does the sub exist to delete?
-    const sub = await Sub.findById(id).exec()
-
-    if (!sub) {
-        return res.status(400).json({ message: 'Sub not found' })
-    }
-
-    const result = await sub.deleteOne()
-
-    const reply = `Subname ${result.subname} with ID ${result._id} deleted`
-
-    res.json(reply)
-})
-
-
-
-module.exports = {
-
-    getAllSubs,
-    createNewSub,
-    deleteSub
-}
+      
+});
+  
+  module.exports = {createSubs, getSubs }
