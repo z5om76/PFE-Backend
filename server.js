@@ -1,15 +1,15 @@
 require('dotenv').config()
+require('express-async-errors')
 const express = require ("express")
 const app = express()
 const path = require('path')
-const {logger} = require('./middleware/logger')
+const {logger , logEvents} = require('./middleware/logger')
 const errorHandler = require ('./middleware/errorHandler')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 const mongoose = require ('mongoose')
-const {logEvents} = require('./middleware/logger')
 const PORT = process.env.PORT || 3500
 
 
@@ -29,6 +29,8 @@ app.use('/', express.static(path.join(__dirname, 'Public')))
 
 app.use('/', require ('./routes/root'))
 
+app.use('/authClient', require('./routes/authClientRoutes'))
+
 app.use('/clients', require('./routes/clientsRoutes'))
 
 app.use('/employes',require('./routes/employesRoutes'))
@@ -36,6 +38,10 @@ app.use('/employes',require('./routes/employesRoutes'))
 app.use('/doctors',require('./routes/doctorsRoutes'))
 
 app.use('/couchs',require('./routes/couchsRoutes'))
+
+app.use("/payments", require('./routes/paymentsRoutes'));
+
+app.use("/subs", require('./routes/subsRoutes'));
 
 app.all('*', (req,res)=>{
     res.status(404)
