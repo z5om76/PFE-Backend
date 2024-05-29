@@ -1,0 +1,21 @@
+20240528	09:46:47	485e9300-db63-490f-9462-b011b67bfe21	ValidationError: Subs validation failed: Employee: Path `Employee` is required.	POST	/subs	undefined
+20240528	09:49:26	bea45964-793c-42b9-a4b4-f4c1c98d6ea2	ValidationError: Subs validation failed: Employee: Path `Employee` is required.	POST	/subs	undefined
+20240528	09:52:08	1848b50a-c790-4d75-9c39-f15833b1d330	CastError: Cast to ObjectId failed for value "{ Employee: '6623cb335067712942433501' }" (type Object) at path "_id" for model "Subs"	POST	/subs	undefined
+20240528	09:53:30	c91c4e58-9c98-4167-9b25-711a7716256f	CastError: Cast to ObjectId failed for value "{ Employee: '6623cb335067712942433501' }" (type Object) at path "_id" for model "Subs"	POST	/subs	undefined
+20240528	09:56:06	cf4309b8-5a24-4519-9706-5a0eb8eb8624	CastError: Cast to ObjectId failed for value "{ employee: undefined }" (type Object) at path "_id" for model "Emlpoyee"	POST	/subs	undefined
+20240528	09:57:17	9447febb-71c0-4687-b498-9efe630d540a	CastError: Cast to ObjectId failed for value "{ employee: '6623cb335067712942433501' }" (type Object) at path "_id" for model "Emlpoyee"	POST	/subs	undefined
+20240528	09:58:41	c3e60276-e122-4b7d-8cfc-aa288cbf6fca	CastError: Cast to ObjectId failed for value "{ employee: '6623cb335067712942433501' }" (type Object) at path "_id" for model "Emlpoyee"	POST	/subs	undefined
+20240528	09:59:14	82c21ca1-1729-4018-9a02-d627246899ec	CastError: Cast to ObjectId failed for value "{ employee: '6623cb335067712942433501' }" (type Object) at path "_id" for model "Emlpoyee"	POST	/subs	undefined
+20240528	09:59:26	e12b28a1-a3a1-4168-a498-7aacd88c4bfa	CastError: Cast to ObjectId failed for value "{ employee: '6623cb335067712942433501' }" (type Object) at path "_id" for model "Emlpoyee"	POST	/subs	undefined
+20240528	10:38:27	2ed1632d-1309-409d-9ef1-04a75db7b453	ObjectParameterError: Parameter "filter" to findOne() must be an object, got "66533a4753c64da7af87a452" (type string)	POST	/subs	undefined
+20240528	10:42:53	9beb0a99-e57d-4d4d-9d95-ed36a906d6cb	CastError: Cast to ObjectId failed for value "Model { Client }" (type function) at path "Client" for model "Subs"	POST	/subs	undefined
+20240528	10:45:19	e0cbf2f9-4809-45d1-9437-1be8ab8e8403	ReferenceError: id is not defined	POST	/subs	undefined
+20240528	10:49:39	e5bb254f-8e1e-41d3-8aa9-54b983df7dd1	ReferenceError: endDate is not defined	POST	/subs	undefined
+20240528	10:51:15	94bd938d-87fd-455e-a1e1-89f0a7a173cb	ObjectParameterError: Parameter "filter" to findOne() must be an object, got "Fri Jun 28 2024 10:51:15 GMT+0100 (Central European Standard Time)" (type object)	POST	/subs	undefined
+20240528	10:55:42	db7d5704-2b55-45ce-84a7-78e78b9a9e02	ReferenceError: Subscription is not defined	POST	/subs	undefined
+20240528	11:19:19	482be56c-7c7e-47f1-9137-c288d7a0f42a	Error: You must provide either price or price_data for each line item when using prices.	POST	/payments/session	undefined
+20240529	10:48:58	01b119a9-39ef-4691-a1a3-3f091868bb4d	MongoServerError: E11000 duplicate key error collection: MindConnectDB.subs index: user_1_active_1 dup key: { user: null, active: true }	POST	/subs	undefined
+20240529	10:50:51	3d0d8790-746f-4272-b66a-35b6d6a2a350	MongoServerError: E11000 duplicate key error collection: MindConnectDB.subs index: user_1_active_1 dup key: { user: null, active: true }	POST	/subs	undefined
+20240529	10:51:55	c2f88fa7-5c2d-47ea-a340-ede1e74a93c8	MongoServerError: E11000 duplicate key error collection: MindConnectDB.subs index: user_1_active_1 dup key: { user: null, active: true }	POST	/subs	undefined
+20240529	10:53:14	ab6c3536-6e78-4064-be74-74e80935a0cf	MongoServerError: E11000 duplicate key error collection: MindConnectDB.subs index: user_1_active_1 dup key: { user: null, active: true }	POST	/subs	undefined
+20240529	11:19:44	9a614d56-b990-4b2c-876c-392bcfd237cd	ReferenceError: Session is not defined	POST	/subs	undefined

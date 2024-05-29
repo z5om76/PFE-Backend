@@ -11,6 +11,8 @@ const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
 const mongoose = require ('mongoose')
 const PORT = process.env.PORT || 3500
+const subscriptionService = require('./utils/subscriptionService');
+const SessionsService = require('./utils/SessionsService');
 
 
 console.log(process.env.NODE_ENV)
@@ -42,6 +44,12 @@ app.use('/coaches',require('./routes/coachesRoutes'))
 app.use("/payments", require('./routes/paymentsRoutes'));
 
 app.use("/subs", require('./routes/subsRoutes'));
+
+app.use("/session", require('./routes/SessionsRoutes'));
+
+
+subscriptionService;
+SessionsService;
 
 app.all('*', (req,res)=>{
     res.status(404)
