@@ -30,11 +30,6 @@ const subsSchema = new mongoose.Schema({
     required: true
   },
 
-  active: {
-    type: Boolean,
-    default: true
-  }
-
 
 
 })
