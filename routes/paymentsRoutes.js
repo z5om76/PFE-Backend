@@ -8,15 +8,11 @@ router.use(verifyJWT)
 
 router.route('/prices')
 
-    .get(paymentsController.getInstant)
-    
+    .get(paymentsController.getPrices)
 
-module.exports = router 
-
-
-
+ 
 router.route('/session')
 
     .post(paymentsController.createSubsecription)
 
-module.exports = router 
+module.exports = router;

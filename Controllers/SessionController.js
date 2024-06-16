@@ -5,21 +5,25 @@ const cron = require('node-cron');
 
 
 const getSessions = asyncHandler ( async (req, res) => {
-  const {client} = req.body
+  const userId = req.user.id;
 
-  const subs = await Session.find({"Client":client})
+  const sessions = await Session.find({"userId":userId})
 
  
-  if (!subs?.length) {
-      return res.status(400).json({ message: 'No subs found' })
+  if (!sessions?.length) {
+      return res.status(400).json({ message: 'No sessions found for the user' })
   }
 
-  res.json(subs)
-})
+  res.json(sessions)
+});
 
+const getSessionCount = asyncHandler(async (req, res) => {
+  const userId = req.userId; // Get user ID from the request
 
+  // Count sessions for the user with the provided user ID
+  const sessionCount = await Session.countDocuments({ "userId": userId });
 
+  res.json({ sessionCount });
+});
 
-
-
-module.exports = { getSessions }
+module.exports = { getSessions,  getSessionCount}

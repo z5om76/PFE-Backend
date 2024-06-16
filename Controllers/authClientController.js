@@ -26,7 +26,8 @@ const login = async (req, res) => {
         {
             "ClientInfo": {
                 "clientname": foundClient.clientname,
-                "email": foundClient.email
+                "email": foundClient.email,
+                "stripeCustomerId": foundClient.stripeCustomerId,
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -75,7 +76,8 @@ const refresh = (req, res) => {
                 {
                     "ClientInfo": {
                         "clientname": foundClient.clientname,
-                        "email": foundClient.email
+                        "email": foundClient.email,
+                        "stripeCustomerId": foundClient.stripeCustomerId,
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,

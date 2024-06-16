@@ -7,6 +7,8 @@ router.use(verifyJWT)
 
 router.route('/checksessions')
 
+    .get(SessionController.getSessionCount)
+
     .get(SessionController.getSessions)
 
 

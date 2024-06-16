@@ -44,7 +44,7 @@ const createNewClient = asyncHandler(async (req, res) => {
         email,
       },
       {
-        apiKey: process.env.STRIPE_SECRET_KEY,
+        apiKey: process.env.STRIPE_PRIVATE_KEY,
       }
     );
 
