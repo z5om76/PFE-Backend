@@ -1,4 +1,5 @@
 const Client = require('../models/Client')
+const Employee = require('../models/Employee')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -6,27 +7,37 @@ const jwt = require('jsonwebtoken')
 // @route POST /auth
 // @access Public
 const login = async (req, res) => {
-    const { email, password } = req.body
 
-    if ( !password || !email) {
+    const { password , email, role } = req.body
+
+
+    if (!password || !email || !role) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
-    const foundClient = await Client.findOne({ email }).exec()
+    let foundUser;
+    if (role === 'client') {
+        foundUser = await Client.findOne({ email }).exec()
+    } else if (role === 'employee') {
+        foundUser = await Employee.findOne({ email }).exec()
+    } else {
+        return res.status(400).json({ message: 'Invalid role' })
+    }
 
-    if (!foundClient) {
+    if (!foundUser) {
         return res.status(401).json({ message: 'Unauthorized' })
     }
 
-    const match = await bcrypt.compare(password, foundClient.password)
+    const match = await bcrypt.compare(password, foundUser.password)
 
     if (!match) return res.status(401).json({ message: 'Unauthorized' })
 
     const accessToken = jwt.sign(
         {
             "ClientInfo": {
-                "clientname": foundClient.clientname,
-                "email": foundClient.email
+                "clientname": foundUser.clientname || foundUser.employeename,
+                "email": foundUser.email,
+                "role": role
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -34,7 +45,7 @@ const login = async (req, res) => {
     )
 
     const refreshToken = jwt.sign(
-        { "email": foundClient.email },
+        { "email": foundUser.email , "role": role },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: '7d' }
     )
@@ -67,15 +78,25 @@ const refresh = (req, res) => {
         async (err, decoded) => {
             if (err) return res.status(403).json({ message: 'Forbidden' })
 
-            const foundClient = await Client.findOne({ eemail: decoded.email }).exec()
+            const { email, role } = decoded
 
-            if (!foundClient) return res.status(401).json({ message: 'Unauthorized' })
+            let foundUser;
+            if (role === 'client') {
+                foundUser = await Client.findOne({ email }).exec()
+            } else if (role === 'employee') {
+                foundUser = await Employee.findOne({ email }).exec()
+            } else {
+                return res.status(401).json({ message: 'Unauthorized' })
+            }
+
+            if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
 
             const accessToken = jwt.sign(
                 {
                     "ClientInfo": {
-                        "clientname": foundClient.clientname,
-                        "email": foundClient.email
+                        "clientname": foundUser.clientname || foundUser.employeename,
+                        "email": foundUser.email,
+                        "role": role
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
