@@ -4,6 +4,9 @@ const Client = require('../models/Client')
 const Employee = require('../models/Employee')
 const Subs = require('../models/Subs');
 const Session = require('../models/Session')
+const { createGoogleMeetEvent } = require('../utils/GoogleMeet');
+const Notification = require('../models/Notification')
+const Reminder = require('../models/Reminder')
 
 
 
@@ -114,7 +117,38 @@ const getSubs = asyncHandler ( async (req, res) => {
         "Employee": ide,
         sessionDate
     });
+    // Create a Google Meet event for the session
+   
+    const event = await createGoogleMeetEvent(session);
+    session.meetLink = event.hangoutLink; // Save the Google Meet link
+
       sessionPromises.push(session.save());
+
+
+    const notificationObject = new Notification({
+      "Client": idc,
+      "Employee": ide,
+      "Session": session.id,
+      "notificationDate": session.sessionDate,
+      "description": session.meetLink
+    })
+
+    const notification = await Notification.create(notificationObject)
+
+
+    const thirtyMinutesAgo = new Date(session.sessionDate - 30 * 60 * 1000);
+     
+    const ReminderObject = new Reminder({
+      "Client": idc,
+      "Employee": ide,
+      "Session": session.id,
+      "reminderDate": thirtyMinutesAgo
+      
+    })
+
+    const reminder = await Reminder.create(ReminderObject)
+
+
   }
 
     await Promise.all(sessionPromises);
@@ -146,7 +180,22 @@ const getSubs = asyncHandler ( async (req, res) => {
         "Employee": ide,
         sessionDate
     });
+    // Create a Google Meet event for the session
+    const event = await createGoogleMeetEvent(session);
+    session.meetLink = event.hangoutLink; // Save the Google Meet link
+
       sessionPromises.push(session.save());
+
+      const notificationObject = new Notification({
+        "Client": idc,
+        "Employee": ide,
+        "Session": session.id,
+        "notificationDate": session.sessionDate,
+        "description": session.meetLink
+      })
+  
+      const notification = await Notification.create(notificationObject)
+  
   }
 
     await Promise.all(sessionPromises);
@@ -177,7 +226,23 @@ const getSubs = asyncHandler ( async (req, res) => {
         "Employee": ide,
         sessionDate
     });
+
+    // Create a Google Meet event for the session
+    const event = await createGoogleMeetEvent(session);
+    session.meetLink = event.hangoutLink; // Save the Google Meet link
+    
       sessionPromises.push(session.save());
+
+      const notificationObject = new Notification({
+        "Client": idc,
+        "Employee": ide,
+        "Session": session.id,
+        "notificationDate": session.sessionDate,
+        "description": session.meetLink
+      })
+  
+      const notification = await Notification.create(notificationObject)
+  
   }
 
     await Promise.all(sessionPromises);
