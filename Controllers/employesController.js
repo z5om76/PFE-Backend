@@ -1,6 +1,7 @@
 const Employee = require('../models/Employee')
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcrypt')
+const JobRequest = require("../models/JobRequest")
 
 // @desc Get all employes
 // @route GET /employes
@@ -21,15 +22,15 @@ const getAllEmployes = asyncHandler(async (req, res) => {
 // @route POST /employes
 // @access Private
 const createNewEmployee = asyncHandler(async (req, res) => {
-    const { employeename, password, job } = req.body
+    const {name, password, job , email , image , CV } = req.body
 
     // Confirm data
-    if (!employeename || !password || !job ) {
+    if (!name || !password || !job || !email || !image || !CV) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
     // Check for duplicate employeename
-    const duplicate = await Employee.findOne({ employeename }).lean().exec()
+    const duplicate = await JobRequest.findOne({ email }).lean().exec()
 
     if (duplicate) {
         return res.status(409).json({ message: 'Duplicate employeename' })
@@ -38,10 +39,10 @@ const createNewEmployee = asyncHandler(async (req, res) => {
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
 
-    const employeeObject = { employeename, "password": hashedPwd, job }
+    const employeeObject = { name, "password": hashedPwd, job , email , image , CV}
 
     // Create and store new employee 
-    const employee = await Employee.create(employeeObject)
+    const employee = await JobRequest.create(employeeObject)
 
     if (employee) { //created 
         res.status(201).json({ message: `New employee ${employeename} created` })
@@ -69,7 +70,7 @@ const updateEmployee = asyncHandler(async (req, res) => {
     }
 
     // Check for duplicate 
-    const duplicate = await Employee.findOne({ employeename }).lean().exec()
+    const duplicate = await Employee.findOne({ email }).lean().exec()
 
     // Allow updates to the original employee 
     if (duplicate && duplicate?._id.toString() !== id) {
@@ -121,9 +122,9 @@ const deleteEmployee = asyncHandler(async (req, res) => {
     res.json(reply)
 })
 
-const getDoctors = asyncHandler(async (req, res) => {
+const getTherapist = asyncHandler(async (req, res) => {
 
-    const { job="doctor" } = req.params;
+    const { job="Therapist" } = req.params;
 
         const Employes = await Employee.find({ job : job }).select('-password').lean();
         res.json(Employes);
@@ -133,8 +134,33 @@ const getDoctors = asyncHandler(async (req, res) => {
         
   })
 
-  const getCoaches = asyncHandler(async (req, res) => {
-    const { job="coach" } = req.params;
+  const getSSC = asyncHandler(async (req, res) => {
+
+    const { job="Soft Skills Coach" } = req.params;
+
+        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        res.json(Employes);
+
+      if(!job?.length){
+        return res.status(500).json({  message: 'No employes found' })}
+        
+  })
+
+  const getSCC = asyncHandler(async (req, res) => {
+
+    const { job="Self Care Coach" } = req.params;
+
+        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        res.json(Employes);
+
+      if(!job?.length){
+        return res.status(500).json({  message: 'No employes found' })}
+        
+  })
+
+  const getFCSC = asyncHandler(async (req, res) => {
+
+    const { job="Family and Community Support Coach" } = req.params;
 
         const Employes = await Employee.find({ job : job }).select('-password').lean();
         res.json(Employes);
@@ -147,8 +173,10 @@ const getDoctors = asyncHandler(async (req, res) => {
 
 
 module.exports = {
-    getCoaches,
-    getDoctors,
+    getSSC,
+    getSCC,
+    getTherapist,
+    getFCSC,
     getAllEmployes,
     createNewEmployee,
     updateEmployee,
