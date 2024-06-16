@@ -10,4 +10,5 @@ router.route('/')
     .get(SubsController.getSubs)
     .post(SubsController.createSubs)
 
+
 module.exports = router 

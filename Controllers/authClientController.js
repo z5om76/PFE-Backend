@@ -38,6 +38,7 @@ const login = async (req, res) => {
                 "clientname": foundUser.clientname || foundUser.employeename,
                 "email": foundUser.email,
                 "role": role
+                "stripeCustomerId": foundUser.stripeCustomerId,
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -97,6 +98,8 @@ const refresh = (req, res) => {
                         "clientname": foundUser.clientname || foundUser.employeename,
                         "email": foundUser.email,
                         "role": role
+                        "stripeCustomerId": foundClient.stripeCustomerId,
+
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
