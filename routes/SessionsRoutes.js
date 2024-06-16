@@ -11,3 +11,10 @@ router.route('/checksessions')
 
 
 module.exports = router 
+
+router.route('/checksubs')
+
+    .get(SessionController.getSubs)
+
+
+module.exports = router 
