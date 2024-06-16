@@ -1,13 +1,27 @@
 const asyncHandler = require('express-async-handler')
 const Session = require('../models/Session');
-const cron = require('node-cron');
+const Subs = require('../models/Subs')
 
 
 
 const getSessions = asyncHandler ( async (req, res) => {
   const {client} = req.body
 
-  const subs = await Session.find({"Client":client})
+  const sessions = await Session.find({"Client":client})
+
+ 
+  if (!sessions?.length) {
+      return res.status(400).json({ message: 'No sessions found' })
+  }
+
+  res.json(sessions)
+})
+
+
+const getSubs = asyncHandler ( async (req, res) => {
+  const {client} = req.body
+
+  const subs = await Subs.find({"Client":client})
 
  
   if (!subs?.length) {
@@ -21,5 +35,4 @@ const getSessions = asyncHandler ( async (req, res) => {
 
 
 
-
-module.exports = { getSessions }
+module.exports = { getSessions , getSubs }
