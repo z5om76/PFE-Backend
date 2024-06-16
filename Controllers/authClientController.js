@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken')
 // @route POST /auth
 // @access Public
 const login = async (req, res) => {
-    const { clientname, password , email } = req.body
+    const { email, password } = req.body
 
-    if (!clientname || !password || !email) {
+    if ( !password || !email) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -30,7 +30,7 @@ const login = async (req, res) => {
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '60m' }
+        { expiresIn: '1d' }
     )
 
     const refreshToken = jwt.sign(
