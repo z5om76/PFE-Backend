@@ -4,6 +4,9 @@ const Client = require('../models/Client')
 const Employee = require('../models/Employee')
 const Subs = require('../models/Subs');
 const Session = require('../models/Session')
+const { createGoogleMeetEvent } = require('../utils/GoogleMeet');
+const Notification = require('../models/Notification')
+const Reminder = require('../models/Reminder')
 
 
 function getRandomDaytimeHour() {
@@ -86,6 +89,7 @@ const getSubs = asyncHandler ( async (req, res) => {
    }
 
   
+
    // Create a subscription session with Stripe
    const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -104,12 +108,170 @@ const getSubs = asyncHandler ( async (req, res) => {
     }
 });
 
+    const subscriptions = await stripe.charges.list(
+       
+      {
+        customer: client.stripeCustomerId,
+      },
+      {
+        apiKey: process.env.STRIPE_PRIVATE_KEY,
+      }
+    );
+    
+    const plan = subscriptions.data[0].amount;
+    
+   
+        const sessionPromises = [];
+        const now = new Date();
+       for (let i = 0; i < 4; i++) {
+        const baseDate = new Date(now);
+        baseDate.setDate(baseDate.getDate() + (7 * i)); // Each session one week apart
+
+      const sessionDate = await findNonDuplicateSessionDate(ide, baseDate);
+      const session = new Session({
+        "Sub": sub.id,
+        "Client": idc,
+        "Employee": ide,
+        sessionDate
+    });
+    // Create a Google Meet event for the session
+   
+    const event = await createGoogleMeetEvent(session);
+    session.meetLink = event.hangoutLink; // Save the Google Meet link
+
+      sessionPromises.push(session.save());
+
+
+    const notificationObject = new Notification({
+      "Client": idc,
+      "Employee": ide,
+      "Session": session.id,
+      "notificationDate": session.sessionDate,
+      "description": session.meetLink
+    })
+
+    const notification = await Notification.create(notificationObject)
+
+
+    const thirtyMinutesAgo = new Date(session.sessionDate - 30 * 60 * 1000);
+     
+    const ReminderObject = new Reminder({
+      "Client": idc,
+      "Employee": ide,
+      "Session": session.id,
+      "reminderDate": thirtyMinutesAgo
+      
+    })
+
+    const reminder = await Reminder.create(ReminderObject)
+
+
+  }
+
+
     // Save the Stripe session ID to the client to track the ongoing process
     client.stripeSessionId = session.id;
     await client.save();
 
+
         // Create subscription in the database
-        const subscription = await createSubscription(idc, employee, subscriptionType);
+        // const subscription = await createSubscription(idc, employee, subscriptionType);
+
+ if (plan === 3000) {
+
+        const type = "1 Month"
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + 1);
+        const subObject = {"Type": type, "Client" : idc, "Employee" : ide.id , endDate}
+        const sub = await Subs.create(subObject);
+      }
+        else if (plan === 9000) {
+          const type = "3 Months"
+          const endDate = new Date();
+          endDate.setMonth(endDate.getMonth() + 3);
+          const subObject = {"Type": type, "Client" : idc, "Employee" : ide.id , endDate}
+          const sub = await Subs.create(subObject);
+      }  else if (plan === 18000) {
+          const type = "6 Months"
+          const endDate = new Date();
+          endDate.setMonth(endDate.getMonth() + 6);
+          const subObject = {"Type": type, "Client" : idc, "Employee" : ide.id , endDate}
+          const sub = await Subs.create(subObject);
+      }
+          
+          
+          if (sub) { //created 
+              res.status(201).json({ message: `New sub has been created` })
+          } else {
+              res.status(400).json({ message: 'Invalid sub data received' })
+
+
+              const sessionPromises = [];
+        const now = new Date();
+       for (let i = 0; i < 12; i++) {
+        const baseDate = new Date(now);
+        baseDate.setDate(baseDate.getDate() + (7 * i)); // Each session one week apart
+
+      const sessionDate = await findNonDuplicateSessionDate(ide, baseDate);
+      const session = new Session({
+        "Sub": sub.id,
+        "Client": idc,
+        "Employee": ide,
+        sessionDate
+    });
+    // Create a Google Meet event for the session
+    const event = await createGoogleMeetEvent(session);
+    session.meetLink = event.hangoutLink; // Save the Google Meet link
+
+      sessionPromises.push(session.save());
+
+      const notificationObject = new Notification({
+        "Client": idc,
+        "Employee": ide,
+        "Session": session.id,
+        "notificationDate": session.sessionDate,
+        "description": session.meetLink
+      })
+  
+      const notification = await Notification.create(notificationObject)
+  
+  }
+
+    await Promise.all(sessionPromises);
+          }} 
+       
+  
+          const sessionPromises = [];
+        const now = new Date();
+       for (let i = 0; i < 24; i++) {
+        const baseDate = new Date(now);
+        baseDate.setDate(baseDate.getDate() + (7 * i)); // Each session one week apart
+
+      const sessionDate = await findNonDuplicateSessionDate(ide, baseDate);
+      const session = new Session({
+        "Sub": sub.id,
+        "Client": idc,
+        "Employee": ide,
+        sessionDate
+    });
+
+    // Create a Google Meet event for the session
+    const event = await createGoogleMeetEvent(session);
+    session.meetLink = event.hangoutLink; // Save the Google Meet link
+    
+      sessionPromises.push(session.save());
+
+      const notificationObject = new Notification({
+        "Client": idc,
+        "Employee": ide,
+        "Session": session.id,
+        "notificationDate": session.sessionDate,
+        "description": session.meetLink
+      })
+  
+      const notification = await Notification.create(notificationObject)
+  
+  }
 
 
 // Return the session details to the frontend

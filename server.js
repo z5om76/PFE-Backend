@@ -14,7 +14,13 @@ const PORT = process.env.PORT || 3500
 const subscriptionService = require('./utils/subscriptionService');
 const SessionsService = require('./utils/SessionsService');
 const stripeWebhookRoute = require('./routes/stripeWebhook');
+const NotifcaionsService = require('./utils/NotificationsService')
+const ReminderService = require('./utils/ReminderService')
 
+
+
+
+ 
 
 console.log(process.env.NODE_ENV)
 
@@ -28,6 +34,10 @@ app.use(express.json())
 
 app.use(cookieParser())
 
+
+
+
+
 app.use('/', express.static(path.join(__dirname, 'Public')))
 
 app.use('/', require ('./routes/root'))
@@ -38,15 +48,19 @@ app.use('/clients', require('./routes/clientsRoutes'))
 
 app.use('/employes',require('./routes/employesRoutes'))
 
-app.use('/doctors',require('./routes/doctorsRoutes'))
-
 app.use('/coaches',require('./routes/coachesRoutes'))
 
 app.use("/payments", require('./routes/paymentsRoutes'));
 
-app.use("/subs", require('./routes/subsRoutes'));
+app.use("/session", require('./routes/subsRoutes'));
 
-app.use("/session", require('./routes/SessionsRoutes'));
+app.use("/sessions", require('./routes/SessionsRoutes'));
+
+app.use("/notifications", require('./routes/ReminderRoutes'))
+
+app.use("/reminders", require('./routes/NotifcationsRoutes')) 
+
+ 
 
 app.use('/stripe', stripeWebhookRoute);
 
@@ -56,6 +70,10 @@ app.use('/stripe', stripeWebhookRoute);
 
 subscriptionService;
 SessionsService;
+NotifcaionsService;
+ReminderService;
+
+
 
 app.all('*', (req,res)=>{
     res.status(404)
