@@ -20,7 +20,11 @@ Employee: {
   sessionDate: {
     type: Date,
     required: true
-  }
+  },
+
+  meetLink: { 
+    type: String, 
+    required: false }
 });
 
 const Session = mongoose.model('Session', sessionSchema);
