@@ -40,4 +40,4 @@ const getSessionCount = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { getSessions , getSubs, ,  getSessionCount }
+module.exports = { getSessions , getSubs,  getSessionCount }
