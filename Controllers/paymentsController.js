@@ -77,9 +77,6 @@ const createSubsecription = asyncHandler( async (req, res) => {
       employeeId, // Pass the employee ID in metadata
       clientId: client._id.toString(), // Pass the client ID as well
     },
-   
- 
-
 });
 
 

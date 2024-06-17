@@ -37,7 +37,7 @@ const login = async (req, res) => {
             "ClientInfo": {
                 "clientname": foundUser.clientname || foundUser.employeename,
                 "email": foundUser.email,
-                "role": role
+                "role": role,
                 "stripeCustomerId": foundUser.stripeCustomerId,
             }
         },
@@ -97,7 +97,7 @@ const refresh = (req, res) => {
                     "ClientInfo": {
                         "clientname": foundUser.clientname || foundUser.employeename,
                         "email": foundUser.email,
-                        "role": role
+                        "role": role,
                         "stripeCustomerId": foundClient.stripeCustomerId,
 
                     }

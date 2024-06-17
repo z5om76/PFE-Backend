@@ -50,7 +50,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
     }
 
     // Handle the event
-    switch (event.type) {
+   /*  switch (event.type) {
         case 'checkout.session.completed':
           try{
             const session = event.data.object;
@@ -86,17 +86,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
             const endDate = new Date();
             endDate.setMonth(endDate.getMonth() + (subscriptionType === '1 Month' ? 1 : subscriptionType === '3 Months' ? 3 : 6));
 
-            // Create subscription object
-            const subObject = { "Type": subscriptionType, "Client": client._id, "Employee": ide._id,startDate: new Date(), endDate, active: true };
-            const sub = await Subs.create(subObject);
-
-             // Log subscription creation
-            if (sub) {
-                console.log(`New subscription created: ${sub._id}`);
-            } else {
-                console.error('Failed to create subscription');
-            }
-
+         
             // Create sessions for the subscription
             const sessionPromises = [];
             const now = new Date();
@@ -126,7 +116,7 @@ app.post('/webhook', bodyParser.raw({ type: 'application/json' }), async (req, r
             break;
         default:
             console.log(`Unhandled event type ${event.type}`);
-    }
+    } */
 // Return success response
     res.json({ received: true });
 });

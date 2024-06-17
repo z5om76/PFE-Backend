@@ -124,14 +124,14 @@ const deleteEmployee = asyncHandler(async (req, res) => {
 
 const getTherapist = asyncHandler(async (req, res) => {
 
-    const { job="Therapist" } = req.params;
+    const job="Therapist" 
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
-        res.json(Employes);
+        const Employes = await Employee.find({  job }).select('-password').lean();
+        
 
       if(!job?.length){
         return res.status(500).json({  message: 'No employes found' })}
-        
+    res.json(Employes); 
   })
 
   const getSSC = asyncHandler(async (req, res) => {
