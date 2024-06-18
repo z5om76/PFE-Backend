@@ -7,8 +7,6 @@ router.use(verifyJWT)
 
 router.route('/checksessions')
 
-    .get(SessionController.getSessionCount)
-
     .get(SessionController.getSessions)
 
 
@@ -17,6 +15,13 @@ module.exports = router
 router.route('/checksubs')
 
     .get(SessionController.getSubs)
+
+
+module.exports = router 
+
+router.route('/requestupdate')
+
+    .post(SessionController.Updatesession)
 
 
 module.exports = router 
