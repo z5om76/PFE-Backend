@@ -55,13 +55,23 @@ const createNewEmployee = asyncHandler(async (req, res) => {
 // @route PATCH /employes
 // @access Private
 const updateEmployee = asyncHandler(async (req, res) => {
-    const { id, employeename, job, password } = req.body
 
-    // Confirm data 
-    if (!id || !employeename || !job ) {
-        return res.status(400).json({ message: 'All fields except password are required' })
-    }
+    const { id } = req.params;
+    const {employeename, password } = req.body
+    let image;
+    let cv;
 
+    if (!req.file) {
+        return res.status(400).json({ error: 'Image file is required' });
+      } else {
+        image = req.file.path; // store the image path
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ error: 'CV file is required' });
+      } else {
+        cv = req.file.path; // store the CV path
+      }
     // Does the employee exist to update?
     const employee = await Employee.findById(id).exec()
 
@@ -69,16 +79,11 @@ const updateEmployee = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Employee not found' })
     }
 
-    // Check for duplicate 
-    const duplicate = await Employee.findOne({ email }).lean().exec()
+    if (employeename){employee.employeename = employeename}
+    if (image){employee.image = image}
+    if (cv){employee.CV = cv}
 
-    // Allow updates to the original employee 
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate employeename' })
-    }
-
-    employee.employeename = employeename
-    employee.job = job
+    
     
 
     if (password) {
@@ -102,12 +107,6 @@ const deleteEmployee = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Employee ID Required' })
     }
 
-    // Does the employee still have assigned notes?
-    const note = await Note.findOne({ employee: id }).lean().exec()
-    if (note) {
-        return res.status(400).json({ message: 'Employee has assigned notes' })
-    }
-
     // Does the employee exist to delete?
     const employee = await Employee.findById(id).exec()
 
@@ -124,14 +123,14 @@ const deleteEmployee = asyncHandler(async (req, res) => {
 
 const getTherapist = asyncHandler(async (req, res) => {
 
-    const job="Therapist" 
+    const { job="Therapist" } = req.params;
 
-        const Employes = await Employee.find({  job }).select('-password').lean();
-        
+        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        res.json(Employes);
 
       if(!job?.length){
         return res.status(500).json({  message: 'No employes found' })}
-    res.json(Employes); 
+        
   })
 
   const getSSC = asyncHandler(async (req, res) => {
