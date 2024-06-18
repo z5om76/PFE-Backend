@@ -44,7 +44,7 @@ const createNewClient = asyncHandler(async (req, res) => {
         email,
       },
       {
-        apiKey: process.env.STRIPE_PRIVATE_KEY,
+        apiKey: process.env.STRIPE_SECRET_KEY,
       }
     );
 
@@ -64,12 +64,14 @@ const createNewClient = asyncHandler(async (req, res) => {
 // @route PATCH /clients
 // @access Private
 const updateClient = asyncHandler(async (req, res) => {
-    const { id, clientname, email, password } = req.body
+    const { id } = req.params;
+    const { clientname, password} = req.body
 
-    // Confirm data 
-    if (!id || !clientname ) {
-        return res.status(400).json({ message: 'All fields except password are required' })
-    }
+    let image;
+
+  if (req.file) {
+    image = req.file.path; // or any other logic to store the image path
+  }
 
     // Does the client exist to update?
     const client = await Client.findById(id).exec()
@@ -78,17 +80,13 @@ const updateClient = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Client not found' })
     }
 
-    // Check for duplicate 
-    const duplicate = await Client.findOne({ email }).lean().exec()
-
-    // Allow updates to the original client 
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate client' })
-    }
-
-    client.clientname = clientname
+    if(clientname)
+    {client.clientname = clientname}
     
-
+    if (image){
+        client.image= image
+        
+    }
     if (password) {
         // Hash password 
         client.password = await bcrypt.hash(password, 10) // salt rounds 
