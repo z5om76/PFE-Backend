@@ -6,7 +6,7 @@ const clientsController = require('../Controllers/clientsController')
 
 
 router.route('/')
-    .get(clientsController.getAllClients)
+    
     .post(clientsController.createNewClient)
     .patch(clientsController.updateClient)
     .delete(clientsController.deleteClient)
