@@ -13,10 +13,8 @@ const mongoose = require ('mongoose')
 const PORT = process.env.PORT || 3500
 const subscriptionService = require('./utils/subscriptionService');
 const SessionsService = require('./utils/SessionsService');
-const stripeWebhookRoute = require('./routes/stripeWebhook');
 const NotifcaionsService = require('./utils/NotificationsService')
 const ReminderService = require('./utils/ReminderService')
-
 
 
 
@@ -64,8 +62,12 @@ app.use("/notifications", require('./routes/NotifcationsRoutes'))
 
 app.use('/stripe', stripeWebhookRoute);
 
+app.use("/AdminDash", require('./routes/adminDashRoutes'))
 
 
+app.use("/FeedBacks", require ('./routes/FeedBackRoutes'))
+
+app.use("Report", require('./routes/ReportRoutes'))
 
 
 subscriptionService;

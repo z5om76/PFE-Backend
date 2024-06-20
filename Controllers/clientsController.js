@@ -44,7 +44,7 @@ const createNewClient = asyncHandler(async (req, res) => {
         email,
       },
       {
-        apiKey: process.env.STRIPE_PRIVATE_KEY,
+        apiKey: process.env.STRIPE_SECRET_KEY,
       }
     );
 
@@ -65,12 +65,15 @@ const createNewClient = asyncHandler(async (req, res) => {
 // @access Private
 const updateClient = asyncHandler(async (req, res) => {
     const { id } = req.params;
+
     const { clientname, email, password } = req.body
 
-    // Confirm data 
-    if (!id || !clientname ) {
-        return res.status(400).json({ message: 'All fields except password are required' })
-    }
+
+    let image;
+
+  if (req.file) {
+    image = req.file.path; // or any other logic to store the image path
+  }
 
     // Does the client exist to update?
     const client = await Client.findById(id).exec()
@@ -78,6 +81,7 @@ const updateClient = asyncHandler(async (req, res) => {
     if (!client) {
         return res.status(400).json({ message: 'Client not found' })
     }
+
 
     if (email && email !== client.email) {
         // Check for duplicate 
@@ -88,7 +92,18 @@ const updateClient = asyncHandler(async (req, res) => {
         client.email = email;
     }   
 
-    client.clientname = clientname
+    
+
+
+    if(clientname)
+    {
+      client.clientname = clientname
+    }
+    
+    if (image){
+        client.image= image
+        
+    }
 
     if (password) {
         // Hash password 

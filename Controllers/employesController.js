@@ -110,12 +110,6 @@ const deleteEmployee = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Employee ID Required' })
     }
 
-    // Does the employee still have assigned notes?
-    const note = await Note.findOne({ employee: id }).lean().exec()
-    if (note) {
-        return res.status(400).json({ message: 'Employee has assigned notes' })
-    }
-
     // Does the employee exist to delete?
     const employee = await Employee.findById(id).exec()
 
@@ -132,14 +126,14 @@ const deleteEmployee = asyncHandler(async (req, res) => {
 
 const getTherapist = asyncHandler(async (req, res) => {
 
-    const job="Therapist" 
+    const { job="Therapist" } = req.params;
 
-        const Employes = await Employee.find({  job }).select('-password').lean();
-        
+        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        res.json(Employes);
 
       if(!job?.length){
         return res.status(500).json({  message: 'No employes found' })}
-    res.json(Employes); 
+        
   })
 
   const getSSC = asyncHandler(async (req, res) => {
