@@ -6,6 +6,8 @@ const clientsController = require('../Controllers/clientsController')
 
 
 router.route('/')
+
+    .get(clientsController.getAllClients)
     
     .post(clientsController.createNewClient)
 
