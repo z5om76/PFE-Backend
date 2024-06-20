@@ -8,7 +8,9 @@ const clientsController = require('../Controllers/clientsController')
 router.route('/')
     .get(clientsController.getAllClients)
     .post(clientsController.createNewClient)
-    .patch(clientsController.updateClient)
     .delete(clientsController.deleteClient)
+
+    router.route('/:id')
+    .patch(clientsController.updateClient) 
 
 module.exports = router

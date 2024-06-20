@@ -22,10 +22,13 @@ const getAllEmployes = asyncHandler(async (req, res) => {
 // @route POST /employes
 // @access Private
 const createNewEmployee = asyncHandler(async (req, res) => {
-    const {name, password, job , email , image , CV } = req.body
+    const {employeename, password, job , email  , CV } = req.body
+  
+
+   console.log("Request Body:", req.body); 
 
     // Confirm data
-    if (!name || !password || !job || !email || !image || !CV) {
+    if (!name || !password || !job || !email  || !CV) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -39,7 +42,7 @@ const createNewEmployee = asyncHandler(async (req, res) => {
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
 
-    const employeeObject = { name, "password": hashedPwd, job , email , image , CV}
+    const employeeObject = { name, "password": hashedPwd, job , email , CV}
 
     // Create and store new employee 
     const employee = await JobRequest.create(employeeObject)
@@ -55,13 +58,23 @@ const createNewEmployee = asyncHandler(async (req, res) => {
 // @route PATCH /employes
 // @access Private
 const updateEmployee = asyncHandler(async (req, res) => {
-    const { id, employeename, job, password } = req.body
 
-    // Confirm data 
-    if (!id || !employeename || !job ) {
-        return res.status(400).json({ message: 'All fields except password are required' })
-    }
+    const { id } = req.params;
+    const {employeename, password } = req.body
+    let image;
+    let cv;
 
+    if (!req.file) {
+        return res.status(400).json({ error: 'Image file is required' });
+      } else {
+        image = req.file.path; // store the image path
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ error: 'CV file is required' });
+      } else {
+        cv = req.file.path; // store the CV path
+      }
     // Does the employee exist to update?
     const employee = await Employee.findById(id).exec()
 
@@ -69,16 +82,11 @@ const updateEmployee = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Employee not found' })
     }
 
-    // Check for duplicate 
-    const duplicate = await Employee.findOne({ email }).lean().exec()
+    if (employeename){employee.employeename = employeename}
+    if (image){employee.image = image}
+    if (cv){employee.CV = cv}
 
-    // Allow updates to the original employee 
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate employeename' })
-    }
-
-    employee.employeename = employeename
-    employee.job = job
+    
     
 
     if (password) {
@@ -136,9 +144,9 @@ const getTherapist = asyncHandler(async (req, res) => {
 
   const getSSC = asyncHandler(async (req, res) => {
 
-    const { job="Soft Skills Coach" } = req.params;
+    const job="Soft Skills Coach"
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        const Employes = await Employee.find({ job  }).select('-password').lean();
         res.json(Employes);
 
       if(!job?.length){
@@ -148,9 +156,9 @@ const getTherapist = asyncHandler(async (req, res) => {
 
   const getSCC = asyncHandler(async (req, res) => {
 
-    const { job="Self Care Coach" } = req.params;
+    const job="Self Care Coach" 
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        const Employes = await Employee.find({ job  }).select('-password').lean();
         res.json(Employes);
 
       if(!job?.length){
@@ -160,9 +168,9 @@ const getTherapist = asyncHandler(async (req, res) => {
 
   const getFCSC = asyncHandler(async (req, res) => {
 
-    const { job="Family and Community Support Coach" } = req.params;
+    const job="Family and Community Support Coach" 
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        const Employes = await Employee.find({ job }).select('-password').lean();
         res.json(Employes);
 
       if(!job?.length){

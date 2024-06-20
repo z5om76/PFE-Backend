@@ -104,9 +104,26 @@ const getSubs = asyncHandler ( async (req, res) => {
   const existingSubscriptions = await Subs.find({ "Client": idc });
 
   if (existingSubscriptions.length > 1) {
-      // If there are more than one subscription, remove one
-      await Subs.deleteOne({ _id: existingSubscriptions[0]._id });
-      console.log('Duplicate subscription removed');
+      // Get the first subscription to delete
+      const subscriptionToDelete = existingSubscriptions[0];
+
+      // Find all sessions associated with the subscription
+    const sessionsToDelete = await Session.find({ "Sub": subscriptionToDelete._id });
+
+       // Delete associated sessions
+       await Session.deleteMany({ "Sub": subscriptionToDelete._id });
+
+          // Find all notifications associated with the subscription
+    const notificationsToDelete = await Notification.find({ "Client": idc, "Employee": ide, "Session": { $in: sessionsToDelete.map(session => session._id) } });
+
+      // Delete associated notifications
+      await Notification.deleteMany({ "Client": idc, "Employee": ide, "Session": { $in: sessionsToDelete.map(session => session._id) } });
+
+       // Now delete the subscription
+    await Subs.deleteOne({ _id: subscriptionToDelete._id });
+
+    console.log('Duplicate subscription and associated sessions/notifications removed');
+      
   }
 
    
@@ -167,99 +184,5 @@ const getSubs = asyncHandler ( async (req, res) => {
     await Promise.all(sessionPromises);
 
       });
-      
-        /* else if (plan === 9000) {
-          const type = "3 Months"
-          const endDate = new Date();
-          endDate.setMonth(endDate.getMonth() + 3);
-          const subObject = {"Type": type, "Client" : idc, "Employee" : ide.id , endDate}
-          const sub = await Subs.create(subObject);
-  
-          if (sub) { //created 
-              res.status(201).json({ message: `New sub has been created` })
-          } else {
-              res.status(400).json({ message: 'Invalid sub data received' })
-
-
-              const sessionPromises = [];
-        const now = new Date();
-       for (let i = 0; i < 12; i++) {
-        const baseDate = new Date(now);
-        baseDate.setDate(baseDate.getDate() + (7 * i)); // Each session one week apart
-
-      const sessionDate = await findNonDuplicateSessionDate(ide, baseDate);
-      const session = new Session({
-        "Sub": sub.id,
-        "Client": idc,
-        "Employee": ide,
-        sessionDate
-    });
-    // Create a Google Meet event for the session
-    const event = await createGoogleMeetEvent(session);
-    session.meetLink = event.hangoutLink; // Save the Google Meet link
-
-      sessionPromises.push(session.save());
-
-      const notificationObject = new Notification({
-        "Client": idc,
-        "Employee": ide,
-        "Session": session.id,
-        "notificationDate": session.sessionDate,
-        "description": session.meetLink
-      })
-  
-      const notification = await Notification.create(notificationObject)
-  
-  }
-
-    await Promise.all(sessionPromises);
-          }}  */ 
-    /*     else if (plan === 18000) {
-          const type = "6 Months"
-          const endDate = new Date();
-          endDate.setMonth(endDate.getMonth() + 6);
-          const subObject = {"Type": type, "Client" : idc, "Employee" : ide.id , endDate}
-          const sub = await Subs.create(subObject);
-  
-          if (sub) { //created 
-              res.status(201).json({ message: `New sub has been created` })
-          } else {
-              res.status(400).json({ message: 'Invalid sub data received' })
-          }
-
-          const sessionPromises = [];
-        const now = new Date();
-       for (let i = 0; i < 24; i++) {
-        const baseDate = new Date(now);
-        baseDate.setDate(baseDate.getDate() + (7 * i)); // Each session one week apart
-
-      const sessionDate = await findNonDuplicateSessionDate(ide, baseDate);
-      const session = new Session({
-        "Sub": sub.id,
-        "Client": idc,
-        "Employee": ide,
-        sessionDate
-    });
-
-    // Create a Google Meet event for the session
-    const event = await createGoogleMeetEvent(session);
-    session.meetLink = event.hangoutLink; // Save the Google Meet link
-    
-      sessionPromises.push(session.save());
-
-      const notificationObject = new Notification({
-        "Client": idc,
-        "Employee": ide,
-        "Session": session.id,
-        "notificationDate": session.sessionDate,
-        "description": session.meetLink
-      })
-  
-      const notification = await Notification.create(notificationObject)
-  
-  }
-
-    await Promise.all(sessionPromises);
-      } */
 
   module.exports = {createSubs, getSubs }

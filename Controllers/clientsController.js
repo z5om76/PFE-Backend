@@ -64,7 +64,8 @@ const createNewClient = asyncHandler(async (req, res) => {
 // @route PATCH /clients
 // @access Private
 const updateClient = asyncHandler(async (req, res) => {
-    const { id, clientname, email, password } = req.body
+    const { id } = req.params;
+    const { clientname, email, password } = req.body
 
     // Confirm data 
     if (!id || !clientname ) {
@@ -78,16 +79,16 @@ const updateClient = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Client not found' })
     }
 
-    // Check for duplicate 
-    const duplicate = await Client.findOne({ email }).lean().exec()
-
-    // Allow updates to the original client 
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate client' })
-    }
+    if (email && email !== client.email) {
+        // Check for duplicate 
+        const duplicate = await Client.findOne({ email }).lean().exec()
+        if (duplicate) {
+            return res.status(409).json({ message: 'Duplicate email' });
+        }
+        client.email = email;
+    }   
 
     client.clientname = clientname
-    
 
     if (password) {
         // Hash password 
