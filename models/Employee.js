@@ -21,11 +21,6 @@ const EmployeeSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-
-    image: {
-        type: String,
-        required: true,
-      },
     CV: {
         type: String,
         required: true,

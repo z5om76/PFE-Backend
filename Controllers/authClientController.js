@@ -35,10 +35,12 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
         {
             "ClientInfo": {
+                "userId": foundUser._id,
                 "clientname": foundUser.clientname || foundUser.employeename,
                 "email": foundUser.email,
                 "role": role,
                 "stripeCustomerId": foundUser.stripeCustomerId,
+                "_id": foundUser._id
             }
         },
         process.env.ACCESS_TOKEN_SECRET,
@@ -60,7 +62,7 @@ const login = async (req, res) => {
     })
 
     // Send accessToken containing clientname and roles 
-    res.json({ accessToken })
+    res.json({ accessToken, userId: foundUser._id })
 }
 
 // @desc Refresh
@@ -98,8 +100,8 @@ const refresh = (req, res) => {
                         "clientname": foundUser.clientname || foundUser.employeename,
                         "email": foundUser.email,
                         "role": role,
-                        "stripeCustomerId": foundClient.stripeCustomerId,
-
+                        "stripeCustomerId": foundUser.stripeCustomerId,
+                        "_id": foundUser._id
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,

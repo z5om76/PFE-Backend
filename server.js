@@ -54,11 +54,16 @@ app.use("/session", require('./routes/subsRoutes'));
 
 app.use("/sessions", require('./routes/SessionsRoutes'));
 
-app.use("/notifications", require('./routes/ReminderRoutes'))
+app.use("/reminders", require('./routes/ReminderRoutes'))
 
-app.use("/reminders", require('./routes/NotifcationsRoutes')) 
+app.use("/notifications", require('./routes/NotifcationsRoutes')) 
+
+
+
+app.use('/stripe', stripeWebhookRoute);
 
 app.use("/AdminDash", require('./routes/adminDashRoutes'))
+
 
 app.use("/FeedBacks", require ('./routes/FeedBackRoutes'))
 

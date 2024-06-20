@@ -22,10 +22,13 @@ const getAllEmployes = asyncHandler(async (req, res) => {
 // @route POST /employes
 // @access Private
 const createNewEmployee = asyncHandler(async (req, res) => {
-    const {name, password, job , email , image , CV } = req.body
+    const {employeename, password, job , email  , CV } = req.body
+  
+
+   console.log("Request Body:", req.body); 
 
     // Confirm data
-    if (!name || !password || !job || !email || !image || !CV) {
+    if (!name || !password || !job || !email  || !CV) {
         return res.status(400).json({ message: 'All fields are required' })
     }
 
@@ -39,7 +42,7 @@ const createNewEmployee = asyncHandler(async (req, res) => {
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
 
-    const employeeObject = { name, "password": hashedPwd, job , email , image , CV}
+    const employeeObject = { name, "password": hashedPwd, job , email , CV}
 
     // Create and store new employee 
     const employee = await JobRequest.create(employeeObject)
@@ -135,9 +138,9 @@ const getTherapist = asyncHandler(async (req, res) => {
 
   const getSSC = asyncHandler(async (req, res) => {
 
-    const { job="Soft Skills Coach" } = req.params;
+    const job="Soft Skills Coach"
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        const Employes = await Employee.find({ job  }).select('-password').lean();
         res.json(Employes);
 
       if(!job?.length){
@@ -147,9 +150,9 @@ const getTherapist = asyncHandler(async (req, res) => {
 
   const getSCC = asyncHandler(async (req, res) => {
 
-    const { job="Self Care Coach" } = req.params;
+    const job="Self Care Coach" 
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        const Employes = await Employee.find({ job  }).select('-password').lean();
         res.json(Employes);
 
       if(!job?.length){
@@ -159,9 +162,9 @@ const getTherapist = asyncHandler(async (req, res) => {
 
   const getFCSC = asyncHandler(async (req, res) => {
 
-    const { job="Family and Community Support Coach" } = req.params;
+    const job="Family and Community Support Coach" 
 
-        const Employes = await Employee.find({ job : job }).select('-password').lean();
+        const Employes = await Employee.find({ job }).select('-password').lean();
         res.json(Employes);
 
       if(!job?.length){

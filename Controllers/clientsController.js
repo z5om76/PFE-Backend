@@ -65,7 +65,9 @@ const createNewClient = asyncHandler(async (req, res) => {
 // @access Private
 const updateClient = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { clientname, password} = req.body
+
+    const { clientname, email, password } = req.body
+
 
     let image;
 
@@ -80,13 +82,29 @@ const updateClient = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'Client not found' })
     }
 
+
+    if (email && email !== client.email) {
+        // Check for duplicate 
+        const duplicate = await Client.findOne({ email }).lean().exec()
+        if (duplicate) {
+            return res.status(409).json({ message: 'Duplicate email' });
+        }
+        client.email = email;
+    }   
+
+    
+
+
     if(clientname)
-    {client.clientname = clientname}
+    {
+      client.clientname = clientname
+    }
     
     if (image){
         client.image= image
         
     }
+
     if (password) {
         // Hash password 
         client.password = await bcrypt.hash(password, 10) // salt rounds 
